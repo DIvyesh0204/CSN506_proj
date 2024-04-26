@@ -1,0 +1,10 @@
+Parallel approach with 1 threads: 0.850697 seconds
+Parallel approach with 2 threads: 0.279121 seconds
+Parallel approach with 3 threads: 0.196307 seconds
+Parallel approach with 4 threads: 0.167631 seconds
+Parallel approach with 5 threads: 0.129833 seconds
+Parallel approach with 6 threads: 0.133464 seconds
+Parallel approach with 7 threads: 0.138008 seconds
+Parallel approach with 8 threads: 0.142288 seconds
+Best solution found by Bat Algorithm: 0 10 3 5 13 11 7 9 2 6 4 8 14 1 12 
+Total distance of the best solution: 308.167
