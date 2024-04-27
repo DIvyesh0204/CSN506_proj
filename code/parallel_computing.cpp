@@ -87,29 +87,16 @@ vector<int> localSearch(vector<int> solution, vector<vector<double>> cities) {
         }
     }
 
-    // Remove repeated cities
-    vector<bool> visited(N, false);
-    vector<int> newSolution;
-    for (int i = 0; i < N; ++i) {
-        if (!visited[bestSolution[i]]) {
-            newSolution.push_back(bestSolution[i]);
-            visited[bestSolution[i]] = true;
-        }
-    }
-
-    return newSolution;
+    return bestSolution;
 }
 
 // Function to perform Bat Algorithm to solve TSP
 vector<int> batAlgorithm(vector<vector<int>> bats, vector<vector<double>> cities, int numThreads) {
     vector<int> globalBestSolution;
     double globalBestDistance = numeric_limits<double>::max();
-
     vector<double> frequencies(NBATS, fmin);
     vector<double> velocities(NBATS, 0.0);
-
     omp_set_num_threads(numThreads);
-
     for (int iter = 0; iter < ITERATIONS; ++iter) {
         #pragma omp parallel for
         for (int i = 0; i < NBATS; ++i) {
@@ -132,23 +119,17 @@ vector<int> batAlgorithm(vector<vector<int>> bats, vector<vector<double>> cities
                     }
                 }
             }
-
-            // Update frequency
             frequencies[i] = fmin + (fmax - fmin) * ((double)rand() / RAND_MAX);
 
-            // Update velocity
             velocities[i] += (newDistance - globalBestDistance) * frequencies[i];
-
-            // Apply velocity clamping
             if (velocities[i] > vmax) velocities[i] = vmax;
             else if (velocities[i] < -vmax) velocities[i] = -vmax;
 
-            // Move towards the global best solution
             for (int j = 0; j < N; ++j) {
                 if ((double)rand() / RAND_MAX < r0) {
                     double randFactor = (double)rand() / RAND_MAX;
                     velocities[i] *= randFactor;
-                    // Check if the city at index j is already present in newSolution
+
                     bool cityAlreadyPresent = false;
                     for (int k = 0; k < newSolution.size(); ++k) {
                         if (newSolution[k] == globalBestSolution[j]) {
@@ -156,7 +137,6 @@ vector<int> batAlgorithm(vector<vector<int>> bats, vector<vector<double>> cities
                             break;
                         }
                     }
-                    // If the city is not already present, add it to newSolution
                     if (!cityAlreadyPresent) {
                         newSolution[j] = globalBestSolution[j];
                     }
